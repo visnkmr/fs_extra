@@ -2,6 +2,7 @@ use std::fs::read_dir;
 use std::path::Path;
 use std::sync::mpsc::{self, TryRecvError};
 use std::thread;
+use std::time::{Instant, Duration};
 
 extern crate fs_extra;
 use fs_extra::error::*;
@@ -160,7 +161,41 @@ fn it_copy_source_not_exist() {
         },
     };
 }
-
+#[test]
+fn tryut(){
+  println!("{:?}",fileop("/run/media/roger/S/inst".to_string(), "/tmp/new".to_string(),false));
+}
+fn fileop(src: String, dst: String, removefile: bool) -> Result<()> {
+    
+       let mut options = dir::CopyOptions::new(); 
+       let handle = |process_info: TransitProcess| {
+       println!("{:?}",process_info);
+        fs_extra::dir::TransitProcessResult::Skip
+     };
+    
+      if(removefile){
+        // fs::remove_file(src)?;
+        match(fs_extra::move_items_with_progress(&[src], dst,&options,handle)){
+          Ok(_) => {
+            Ok(())
+          },
+          Err(e) => {
+            Err(e)
+          },
+      }
+      }
+      else{
+        match(fs_extra::copy_items_with_progress(&[src], dst,&options,handle)){
+          Ok(_) => {
+            Ok(())
+          },
+          Err(e) => {
+            Err(e)
+          },
+      }
+      }
+      
+    }
 #[test]
 fn it_copy_exist_overwrite() {
     let test_dir = Path::new(TEST_FOLDER).join("it_copy_exist_overwrite");

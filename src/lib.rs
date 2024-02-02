@@ -219,7 +219,7 @@ where
 
     Ok(result)
 }
-
+#[derive(Debug)]
 /// A structure which includes information about the current status of copying or moving a directory.
 pub struct TransitProcess {
     /// Already copied bytes
@@ -340,6 +340,8 @@ where
             let handler = |info: dir::TransitProcess| {
                 info_process.copied_bytes = copied_bytes + info.copied_bytes;
                 info_process.state = info.state;
+                info_process.file_name=info.file_name;
+                
                 let result = progress_handler(info_process.clone());
                 match result {
                     dir::TransitProcessResult::OverwriteAll => options.overwrite = true,

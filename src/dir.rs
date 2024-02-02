@@ -112,7 +112,7 @@ pub struct DirContent {
     /// List all folders and sub folders directory.
     pub directories: Vec<String>,
 }
-
+#[derive(Debug)]
 /// A structure which include information about the current status of the copy or move directory.
 pub struct TransitProcess {
     /// Copied bytes on this time for folder
@@ -130,7 +130,7 @@ pub struct TransitProcess {
 }
 
 ///
-#[derive(Hash, Eq, PartialEq, Clone)]
+#[derive(Hash, Eq, PartialEq, Clone,Debug)]
 pub enum TransitState {
     /// Standard state.
     Normal,
@@ -935,6 +935,7 @@ where
 
         if let Some(file_name) = file_name.to_str() {
             info_process.file_name = file_name.to_string();
+            // println!("{:?}",info_process)
         } else {
             err!("Invalid file name", ErrorKind::InvalidFileName);
         }
