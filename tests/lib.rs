@@ -169,7 +169,7 @@ fn fileop(src: String, dst: String, removefile: bool) -> Result<()> {
     
        let mut options = dir::CopyOptions::new(); 
        let handle = |process_info: TransitProcess| {
-    //    println!("------{:?}",process_info);
+       println!("1------{:?}",process_info);
         fs_extra::dir::TransitProcessResult::Skip
      };
     

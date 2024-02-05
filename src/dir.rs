@@ -934,7 +934,7 @@ where
         };
 
         if let Some(file_name) = file_name.to_str() {
-            info_process.file_name = file_name.to_string();
+            info_process.file_name = to.to_string_lossy().to_string();
             // println!("{:?}",info_process)
         } else {
             err!("Invalid file name", ErrorKind::InvalidFileName);
@@ -949,8 +949,10 @@ where
         while work {
             {
                 let _progress_handler = |info: super::file::TransitProcess| {
+                    println!("3-------{:?}",info);
                     info_process.copied_bytes = copied_bytes + info.copied_bytes;
                     info_process.file_bytes_copied = info.copied_bytes;
+                    info_process.file_total_bytes = info.total_bytes;
                     progress_handler(info_process.clone());
                 };
 
@@ -961,11 +963,15 @@ where
                 Ok(val) => {
                     result += val;
                     work = false;
+                    let mut info_process=info_process.clone();
+                    info_process.file_name=path.to_string_lossy().to_string();
+                    progress_handler(info_process);
                 }
                 Err(err) => match err.kind {
                     ErrorKind::AlreadyExists => {
                         let mut info_process = info_process.clone();
                         info_process.state = TransitState::Exists;
+                        info_process.file_name=path.to_string_lossy().to_string();
                         let user_decide = progress_handler(info_process);
                         match user_decide {
                             TransitProcessResult::Overwrite => {

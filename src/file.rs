@@ -59,6 +59,7 @@ impl Default for CopyOptions {
 }
 
 /// A structure which stores information about the current status of a file that's copied or moved. .
+#[derive(Debug)]
 pub struct TransitProcess {
     /// Copied bytes on this time.
     pub copied_bytes: u64,
@@ -212,6 +213,7 @@ where
                     copied_bytes,
                     total_bytes: file_size,
                 };
+                println!("4=-=-=-=-=-=-={:?}",data);
                 progress_handler(data);
             }
             Err(ref e) if e.kind() == ::std::io::ErrorKind::Interrupted => {}

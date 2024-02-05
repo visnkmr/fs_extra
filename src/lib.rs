@@ -338,9 +338,13 @@ where
             let copied_bytes = result;
             let dir_options = options.clone();
             let handler = |info: dir::TransitProcess| {
+                println!("2========={:?}",info);
                 info_process.copied_bytes = copied_bytes + info.copied_bytes;
                 info_process.state = info.state;
+                info_process.file_total_bytes = info.file_total_bytes;
+                info_process.file_bytes_copied = info.file_bytes_copied;
                 info_process.file_name=info.file_name;
+                // println!("2-------{:?}",info_process);
                 
                 let result = progress_handler(info_process.clone());
                 match result {
