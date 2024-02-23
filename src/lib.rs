@@ -327,7 +327,7 @@ where
         if item.is_dir() {
             if let Some(dir_name) = item.components().last() {
                 if let Ok(dir_name) = dir_name.as_os_str().to_os_string().into_string() {
-                    info_process.dir_name = dir_name;
+                    info_process.dir_name = item.to_string_lossy().to_string();
                 } else {
                     err!("Invalid folder from", ErrorKind::InvalidFolder);
                 }
